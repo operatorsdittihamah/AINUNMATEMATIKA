@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Game Matematika HOTS Kelas 6</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+font-family:'Comic Sans MS';
+background:linear-gradient(to bottom,#8a0278,#fad0c4,#fbc2eb);
+margin:0;
+padding:0;
+}
+
+/* CONTAINER */
+.container{
+min-height:100vh;
+max-width:1200px;
+margin:auto;
+background:white;
+padding:30px 40px;
+box-sizing:border-box;
+}
+
+/* FOTO */
+.foto{
+text-align:center;
+margin-bottom:20px
+}
+.foto img{
+width:240px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.5)
+}
+
+/* JUDUL */
+h1{
+text-align:center;
+color:#80024f;
+font-size:46px;
+margin-bottom:30px
+}
+
+/* SOAL */
+.soal{
+position:relative;
+margin-bottom:30px;
+padding:30px;
+border-radius:22px;
+font-size:32px;
+color:#000;
+overflow:hidden;
+box-shadow:0 10px 20px rgba(0,0,0,.15);
+
+/* DESKTOP DEFAULT */
+background:
+linear-gradient(rgba(141, 3, 26, 0.6),rgba(126, 1, 90, 0.6)),
+url('https://images.unsplash.com/photo-1534710961216-75c88202f43e');
+background-size:cover;
+background-position:center;
+}
+
+/* OVERLAY PUTIH */
+.soal::before{
+content:"";
+position:absolute;
+top:0;left:0;right:0;bottom:0;
+background:rgba(255,255,255,0.85);
+z-index:0;
+border-radius:22px;
+}
+.soal *{
+position:relative;
+z-index:1;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:15px;
+font-size:32px;
+margin-top:15px;
+border-radius:10px;
+border:2px solid #f3a6c8
+}
+
+/* TOMBOL */
+button{
+padding:18px 35px;
+border:none;
+border-radius:18px;
+cursor:pointer;
+font-size:28px;
+background:#d63384;
+color:white;
+margin:20px auto;
+display:block
+}
+button:hover{background:#b02a6a}
+
+/* HASIL */
+.correct{color:#198754;font-weight:bold;font-size:30px}
+.wrong{color:#dc3545;font-weight:bold;font-size:30px}
+#hasil{
+font-size:40px;
+text-align:center;
+color:#d63384
+}
+#pembahasan{
+font-size:28px;
+line-height:1.6
+}
+
+/* 📱 KHUSUS HP: TAMAN BUNGA */
+@media(max-width:768px){
+body{
+background:
+linear-gradient(rgba(255,255,255,0.6),rgba(255,255,255,0.6)),
+url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+}
+
+.container{padding:20px}
+h1{font-size:34px}
+.soal{font-size:26px}
+input{font-size:26px}
+button{font-size:24px}
+#hasil{font-size:32px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="foto">
+<img src="ainun.png">
+</div>
+
+<h1>Mari Belajar Matematika HOTS Kelas 6 Bersama Ainun</h1>
+
+<button onclick="openFullscreen()">🔳 MODE LAYAR PENUH</button>
+
+<form id="quiz"></form>
+
+<button onclick="cekJawaban()">✅ SELESAI & LIHAT SKOR</button>
+
+<h2 id="hasil"></h2>
+<div id="pembahasan"></div>
+
+</div>
+
+<script>
+function openFullscreen(){
+if(document.documentElement.requestFullscreen){
+document.documentElement.requestFullscreen();
+}
+}
+
+const soal=[
+{q:"1. 3/4 dari 160 adalah ...",a:"120",s:"3/4 × 160 = 120"},
+{q:"2. 25% dari 200 adalah ...",a:"50",s:"25% = 25/100 × 200 = 50"},
+{q:"3. Volume kubus dengan rusuk 8 cm adalah ...",a:"512",s:"V = s³ = 8×8×8 = 512"},
+{q:"4. FPB dari 36 dan 48 adalah ...",a:"12",s:"Faktor sama terbesar = 12"},
+{q:"5. KPK dari 6 dan 8 adalah ...",a:"24",s:"Kelipatan persekutuan terkecil = 24"},
+{q:"6. 0,75 = ... %",a:"75",s:"0,75 × 100 = 75%"},
+{q:"7. Luas persegi sisi 15 cm adalah ...",a:"225",s:"L = s × s = 15×15"},
+{q:"8. 2/5 dari 250 adalah ...",a:"100",s:"2/5 × 250 = 100"},
+{q:"9. Panjang rusuk balok jika volumenya 300 dan alasnya 50 adalah ...",a:"6",s:"t = 300 ÷ 50 = 6"},
+{q:"10. 3² + 4² = ...",a:"25",s:"9 + 16 = 25"},
+];
+
+while(soal.length<40){
+let n=soal.length+1;
+soal.push({
+q:`${n}. Jika suatu bilangan dikali 6 hasilnya ${n*6}, bilangan itu adalah ...`,
+a:`${n}`,
+s:`${n*6} ÷ 6 = ${n}`
+});
+}
+
+let quiz=document.getElementById("quiz");
+soal.forEach((s,i)=>{
+quiz.innerHTML+=`
+<div class="soal">
+<p>${s.q}</p>
+<input type="text" id="j${i}">
+<span id="r${i}"></span>
+</div>`;
+});
+
+function cekJawaban(){
+let skor=0;
+let pembahasan="";
+soal.forEach((s,i)=>{
+let j=document.getElementById("j"+i).value;
+let r=document.getElementById("r"+i);
+if(j==s.a){
+r.innerHTML=" ✔ BENAR";
+r.className="correct";
+skor+=2.5;
+}else{
+r.innerHTML=" ✘ SALAH (Jawaban: "+s.a+")";
+r.className="wrong";
+}
+pembahasan+=`<p><b>${s.q}</b><br>Cara: ${s.s}</p>`;
+});
+document.getElementById("hasil").innerHTML="🎉 SKOR AKHIR: "+skor;
+document.getElementById("pembahasan").innerHTML="<h2>Pembahasan</h2>"+pembahasan;
+}
+</script>
+
+</body>
+</html>
